@@ -24,11 +24,11 @@ import sys
 import os
 
 render_relpath = '/var/www/hacksa2015/www'
-db_relpath = '/var/www/hacksai2015'
+db_relpath = '/var/www/hacksa2015'
 
 # The following are for public_html on my PC
-render_relpath = 'hacksa/www'
-db_relpath = 'hacksa'
+#render_relpath = 'hacksa/www'
+#db_relpath = 'hacksa'
 
 # Path relative to cwd
 # On my computer this is ~/public_html
@@ -45,7 +45,7 @@ if len(tagwords) < 1:
 # TODO: Mash with other tables to build up much larger tag cloud
 # e.g. if a hit is in the top three of any chart then add its artist
 
-q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 6 and hits.xid = hitsCharts.xid")
+q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 3 and hits.xid = hitsCharts.xid")
 for x in q2:
   tagwords += [ x['artist'] ]
 
