@@ -4,19 +4,38 @@
 #
 # WARNING for some reason I cant work out how to not have the trailing slash
 # e.g.
-# http://localhost/~andrew/hacksa/www/demo.wsgi/
+# http://localhost/~user/hacksa/www/demo.wsgi/
 #
+# Installing on the vultr vps:
+#
+# http://server/app
+#
+# THIS IS ONLY FOR THE HACKATHON, IT IS LIKELY INSECURE FOR A REAL PRODUCTION SYSTEM!
+#
+# Clone the git repo at /var/www --> /var/www/hacksa2015
+# Copy phaze-space.conf --> /etc/apache2/sites-available
+# Run `a2enmod wsgi`
+# Run `a2enmod rewrite`
+# Run `a2ensite phaze-space`
+# Run `service apache2 restart`
 
 import web
 import sys
 import os
 
+render_relpath = '/var/www/hacksa2015/www'
+db_relpath = '/var/www/hacksai2015'
+
+# The following are for public_html on my PC
+#render_relpath = 'hacksa/www'
+#db_relpath = 'hacksa'
+
 # Path relative to cwd
 # On my computer this is ~/public_html
 # But on the VPS this will need to be something else
-db = web.database(dbn="sqlite", db="hacksa/charts.db")
+db = web.database(dbn="sqlite", db=os.path.join(db_relpath, 'charts.db'))
 
-render = web.template.render('hacksa/www/templates', cache=False) #WTF doesnt a relative path work?
+render = web.template.render(os.path.join(render_relpath, 'templates'), cache=False) #WTF doesnt a relative path work?
 
 urls = (
     '/diag', 'diag',
@@ -25,6 +44,7 @@ urls = (
 
 class diag:
     def GET(self):
+      os.system('ls -la > /tmp/x')
       return "cwd=", os.getcwd()
 
 class controller:
