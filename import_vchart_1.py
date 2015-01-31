@@ -141,6 +141,11 @@ for x in datatracks.values():
         pass
     if song is not None:
       genre = song.get_genre()
+      try:
+        c.execute("INSERT INTO genre (name) VALUES (?)", (genre,))
+      except Exception as e:
+        print e
+        pass
 
   # Man this code is fugly... never put a hackathon into production!
 
@@ -151,6 +156,7 @@ for x in datatracks.values():
   result = musicbrainzngs.search_recordings(query=mq, limit=5)
   #pprint.pprint(result['recording-list'][0])
   mbtags = None
+  mbtrackid = None
   for y in result['recording-list']:
     mbtrackid = y['id']   # <-- matches search results from https://musicbrainz.org/search?query=%22Are+You+Gonna+Go+My+Way%22+AND+artist%3A%22Lenny+Kravitz%22+AND+country%3AAU&type=recording&limit=25&method=advanced
 
@@ -162,7 +168,7 @@ for x in datatracks.values():
       for t in rec['recording']['tag-list']:
         atag = t['name']
         try:
-          c.execute("INSERT INTO genre (name) VALUES (?)", atag)
+          c.execute("INSERT INTO genre (name) VALUES (?)", (atag,))
         except:
           pass
 

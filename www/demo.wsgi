@@ -27,18 +27,35 @@ render_relpath = '/var/www/hacksa2015/www'
 db_relpath = '/var/www/hacksai2015'
 
 # The following are for public_html on my PC
-#render_relpath = 'hacksa/www'
-#db_relpath = 'hacksa'
+render_relpath = 'hacksa/www'
+db_relpath = 'hacksa'
 
 # Path relative to cwd
 # On my computer this is ~/public_html
 # But on the VPS this will need to be something else
 db = web.database(dbn="sqlite", db=os.path.join(db_relpath, 'charts.db'))
 
+qwords = db.select('genre')
+tagwords = [ ]
+for x in qwords:
+  tagwords += [ x['name'] ]
+if len(tagwords) < 1:
+  tagwords = [ 'rock', 'pop', 'dance' ]
+
+# TODO: Mash with other tables to build up much larger tag cloud
+# e.g. if a hit is in the top three of any chart then add its artist
+
+q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 6 and hits.xid = hitsCharts.xid")
+for x in q2:
+  tagwords += [ x['artist'] ]
+
+
 render = web.template.render(os.path.join(render_relpath, 'templates'), cache=False) #WTF doesnt a relative path work?
 
 urls = (
     '/diag', 'diag',
+    '/genre', 'genre',
+    '/top3', 'top3',
     '/(.*)', 'controller'
 )
 
@@ -47,13 +64,26 @@ class diag:
       os.system('ls -la > /tmp/x')
       return "cwd=", os.getcwd()
 
+class genre:
+    def GET(self):
+      p = ""
+      for x in tagwords:
+        p = p + x + "\n"
+      return p
+
+class top3:
+    def GET(self):
+      p = ""
+      for x in q2:
+        p = p + repr(x) + "\n"
+      return p
+
 class controller:
     def GET(self, egg):
         data = web.input()
         if 'demo' in data:
           return "Generate a playlist based on : " + data['wordlist']
 
-        tagwords = [ 'rock', 'pop', 'dance' ]
         return render.index(egg, tagwords)   # index.html is the template
   
 app = web.application(urls, globals())

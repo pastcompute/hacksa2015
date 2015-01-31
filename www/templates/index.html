@@ -79,6 +79,35 @@ function tagappend(txt) {
 </head>
 <body role="document">
 
+   <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Phaze Space</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="http://phaze.space">Home</a></li>
+            <li><a href="http://phaze.space#about">About</a></li>
+            <li><a href="http://phaze.space#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Charts <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Top 100</a></li>
+                <li><a href="#">ARIA Singles</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 <div class="container theme-showcase" role="main">
 
   <!-- Main jumbotron for a primary marketing message or call to action -->
@@ -121,7 +150,7 @@ function tagappend(txt) {
 </p>
     <div id="demo" class="yui3-skin-sam">
       <div id="myCanvasContainer">
-       <canvas width="200" height="100" id="myCanvas">
+       <canvas width="500" height="100" id="myCanvas">
         <p>Anything in here will be replaced on browsers that support the canvas element</p>
        </canvas>
       </div>
