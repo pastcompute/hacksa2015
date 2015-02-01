@@ -17,9 +17,9 @@ conn = sqlite3.connect('charts2.db')
 c = conn.cursor()
 
 c.execute('CREATE TABLE IF NOT EXISTS chart (cid integer primary key autoincrement, date text, description text, name text,url text,fetch date)')
-c.execute('CREATE TABLE IF NOT EXISTS track (track_id primary key not null, artist text, name text, buy text)')
+c.execute('CREATE TABLE IF NOT EXISTS track (track_id primary key not null, artist text, name text, buy text, song_id integer)')
 c.execute('CREATE TABLE IF NOT EXISTS chart_pos (chart_id integer, track_id integer, position integer)')
-
+1
 jsonurl = urllib.urlopen(url)
 
 rawChart = json.loads(jsonurl.read())
