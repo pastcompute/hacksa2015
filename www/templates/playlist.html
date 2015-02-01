@@ -1,0 +1,143 @@
+$def with (egg, songs)
+$# this ugly code copy and pasted from index.html, because building a proof of concept in a few hours is currently the most important thing to be done
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<title>party-on by phaze.space - Hack SA 2015</title>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="shortcut icon" href="static/favicon.jpg" />
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!--<link href="static/bootstrap-tag-cloud.css" rel="stylesheet">
+<script src="static/bootstrap-tag-cloud.js"></script>-->
+
+</head>
+<body role="document" id="mbody" style="background-color: #222222;">
+
+<div style="position:relative; z-index: 200;">
+
+   <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://phaze.space">Phaze Space</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="http://phaze.space/app">PartyOn!</a></li>
+            <li><a href="http://phaze.space#about">About</a></li>
+            <li><a href="http://phaze.space#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Charts <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:alert('Show the Top50 ARIA chart')">Top 100</a></li>
+                <li><a href="javascript:alert('Show the Top50 ARIA chart')">ARIA Singles</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+<!-- divvvv style='background: #00ff00 url(static/dance-108915_1920.jpg) repeat; background-size: cover; min-height: 100%; -moz-background-size: cover;'-->
+<div class="container theme-showcase" role="main" id="mmain">
+
+  <div class="jumbotron" style="background-color: #222222; color: #ffffff;">
+    <h2>Welcome to party-on by Phaze Space!</h2>
+      <p>A leader in time saving tools for party organisation.<br/> Let us help you by generating your playlist!</p>
+<script src="http://coinwidget.com/widget/coin.js"></script>
+<script>
+CoinWidgetCom.go({
+	wallet_address: "122CjP6LsJBCGU3kPqeJWUPTf6Sc38dhFf"
+	, currency: "bitcoin"
+	, counter: "hide"
+	, alignment: "bl"
+	, qrcode: true
+	, auto_show: false
+	, lbl_button: "If you like this, shout us a cup of coffee!"
+	, lbl_address: "Our Bitcoin Address:"
+	, lbl_count: "donations"
+	, lbl_amount: "BTC"
+});
+</script>
+
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">Here is your specially selected playlist!</h2>
+    </div>
+    <div class="panel-body">
+
+      <div class="row" style="background-color: #222222; color: #ffffff;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Song</th>
+                <th>Artist</th>
+                <th>iTunes</th>
+                <th>Google Play</th>
+                <th>Spotify</th>
+              </tr>
+            </thead>
+            <tbody>
+              $for xx in songs:
+                  <tr><td>$(xx['song'])</td><td>$xx['artist']</td><td><a href="$xx['itunes']">Get me from iTunes</a></td><td>Get me from PlayStore</td><td>Get me from Spotify</td></tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+
+<div style="margin:24px;">
+  <input class="btn btn-lg btn-warning" id="submitbutton1" type="submit" name="demo" value="Get this entire Playlist on your iPhone"/>
+  <input class="btn btn-lg btn-warning" id="submitbutton1" type="submit" name="demo" value="Get this entire Playlist on your Android"/>
+</div>
+
+<div style="margin:24px;">
+  <input class="btn btn-lg btn-primary" id="submitbutton1" type="submit" name="demo" value="Tweet this Playlist" />
+  <input class="btn btn-lg btn-primary" id="submitbutton1" type="submit" name="demo" value="Share this Playlist on Facebook"/>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="?premium-features" class="btn btn-lg btn-danger" id="premium" type="submit" name="demo">Premium Features</a>
+</div>
+
+</div>
+<div style="color: white; font-size: -3; margin:100px;">Phaze Space is a Fourtex Labs production. Produced by <a href="https://twitter.com/pastcompute">@pastcompute</a>, zaxxattak, <a href="https://twitter.com/Anup_Raghavan">AnupR</a> &amp; DNS</div>
+</div>
+
+</div>
+<img src="static/dance-108915_1920.jpg" id="bgg" alt="" style="position:fixed; top:0; left:0; min-width:100%; min-height:100%;z-index:100;"/>
+
+</body>
+</html>
+

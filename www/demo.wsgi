@@ -30,8 +30,8 @@ render_relpath = '/var/www/hacksa2015/www'
 db_relpath = '/var/www/hacksa2015'
 
 # The following are for public_html on my PC
-render_relpath = '/home/andrew/Mega/hacksa/www'
-db_relpath = '/home/andrew/Mega/hacksa'
+#render_relpath = '/home/andrew/Mega/hacksa/www'
+#db_relpath = '/home/andrew/Mega/hacksa'
 
 # Path relative to cwd
 # On my computer this is ~/public_html
@@ -112,6 +112,8 @@ class top3:
 class controller:
     def GET(self, egg):
         data = web.input()
+        if 'premium-features' in data:
+          return render.premium()
         if 'demo' in data:
           # "Generate a playlist based on : " + data['wordlist']
           tagwords = data['wordlist']
