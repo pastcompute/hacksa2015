@@ -118,6 +118,8 @@ class controller:
           # "Generate a playlist based on : " + data['wordlist']
           tagwords = data['wordlist']
           songs = magic_build_playlist(tagwords)
+          if data['demo'].startswith('Click'):
+            return render.playlist('aussie', songs)   # index.html is the template
           return render.playlist(egg, songs)   # index.html is the template
 
         tagwords = magic_tag_cloud()

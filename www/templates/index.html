@@ -64,6 +64,7 @@ function tagappend(txt) {
   if (text.val().length == 0) gap="";
   text.val(text.val() + gap + txt);
   jQuery("#submitbutton1").removeAttr("disabled");
+  jQuery("#submitbutton2").removeAttr("disabled");
 }
 
 
@@ -171,6 +172,7 @@ function tagappend(txt) {
         <div id="tag-info" class="input-append">
         <input name="wordlist" id='wordlist' type="text" />
         <input class="btn btn-lg btn-primary" id="submitbutton1" type="submit" name="demo" value="Make my Playlist!" disabled="true" >
+        <input class="btn btn-lg btn-primary" id="submitbutton2" type="submit" name="demo" value="Click here to use only 100% Aussie Artists!" disabled="true" >
         </div>
         <ul id="tag-cloud"></ul>
         
