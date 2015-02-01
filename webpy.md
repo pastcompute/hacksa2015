@@ -6,6 +6,11 @@ sudo easy_install tabulate
 sudo easy_install python-itunes
 sudo pip install musicbrainzngs
 
+or
+
+git clone https://github.com/alastair/python-musicbrainzngs
+python setup.py install
+
 
 
 Web.py hello world

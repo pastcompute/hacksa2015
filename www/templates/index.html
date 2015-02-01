@@ -34,12 +34,6 @@ $def with (egg, tagwords)
 <!--<script src="assets/tagcanvas.min.js" type="text/javascript"></script>-->
 <script src="static/jquery.tagcanvas.min.js" type="text/javascript"></script>
 
-<style>
-body {
-background: url("static/dance-108915_1920.jpg") repeat;
-}
-</style>
-
 <script type="text/javascript">
 jQuery.noConflict();
 jQuery(document).ready(function($$) {
@@ -67,6 +61,7 @@ function tagappend(txt) {
   gap = " ";
   if (text.val().length == 0) gap="";
   text.val(text.val() + gap + txt);
+  jQuery("#submitbutton1").removeAttr("disabled");
 }
 
 
@@ -83,7 +78,7 @@ function tagappend(txt) {
 
 
 </head>
-<body role="document" id="mbody">
+<body role="document" id="mbody" style="background-color: #222222;">
 
    <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -114,12 +109,14 @@ function tagappend(txt) {
       </div>
     </nav>
 
+<div style='background: #00ff00 url(static/dance-108915_1920.jpg) repeat; background-size: cover;'>
+
 <div class="container theme-showcase" role="main" id="mmain">
 
   <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
+  <div class="jumbotron" style="background-color: #222222; color: #ffffff;">
     <h2>Welcome to party-on by phaze.space!</h2>
-      <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
+      <p>A leader in time saving tools for party organisation. Let us help you by generating your playlist!</p>
   </div>
 
   <div class="list-group">
@@ -170,7 +167,7 @@ function tagappend(txt) {
         <label for="ac-input">Choose some words about genre, or artist names.</label><br>
         <div id="tag-info" class="input-append">
         <input name="wordlist" id='wordlist' type="text" />
-        <input class="btn" id="submitbutton1" type="submit" name="demo" value="Go!">
+        <input class="btn btn-lg btn-primary" id="submitbutton1" type="submit" name="demo" value="Make my Playlist!" disabled="true" >
         </div>
         <ul id="tag-cloud"></ul>
         
@@ -179,7 +176,7 @@ function tagappend(txt) {
     </div>
   </div>
 </div>
-
+</div>
 <!-- Query, and if less than 20 songs come up, prompt them for some more, perhaps with a few suggestions -->
 </body>
 </html>
