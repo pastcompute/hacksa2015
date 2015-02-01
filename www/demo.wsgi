@@ -1,6 +1,9 @@
 #
 # Entry point for phaze.space party-on proof of concept demo
 #
+# In case it is not evident to the causal reader, this code is a proof of concept jerry rigged
+# one evening for a hackathon and I would not normally code this hacky for a real world
+# or open source project!
 #
 # WARNING for some reason I cant work out how to not have the trailing slash
 # e.g.
@@ -27,28 +30,56 @@ render_relpath = '/var/www/hacksa2015/www'
 db_relpath = '/var/www/hacksa2015'
 
 # The following are for public_html on my PC
-#render_relpath = 'hacksa/www'
-#db_relpath = 'hacksa'
+render_relpath = '/home/andrew/Mega/hacksa/www'
+db_relpath = '/home/andrew/Mega/hacksa'
 
 # Path relative to cwd
 # On my computer this is ~/public_html
 # But on the VPS this will need to be something else
 db = web.database(dbn="sqlite", db=os.path.join(db_relpath, 'charts.db'))
 
-qwords = db.select('genre')
-tagwords = [ ]
-for x in qwords:
-  tagwords += [ x['name'] ]
-if len(tagwords) < 1:
-  tagwords = [ 'rock', 'pop', 'dance' ]
+# Lots of ugly code to try and be a tag cloud generator
+def magic_tag_cloud():
+  qwords = db.select('genre')
+  tagwords = [ ]
+  for x in qwords:
+    tagwords += [ x['name'] ]
+  if len(tagwords) < 1:
+    tagwords = [ 'rock', 'pop', 'dance' ]
 
-# TODO: Mash with other tables to build up much larger tag cloud
-# e.g. if a hit is in the top three of any chart then add its artist
+  # TODO: Mash with other tables to build up much larger tag cloud
+  # e.g. if a hit is in the top three of any chart then add its artist
 
-q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 3 and hits.xid = hitsCharts.xid")
-for x in q2:
-  tagwords += [ x['artist'] ]
+  q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 3 and hits.xid = hitsCharts.xid")
+  for x in q2:
+    tagwords += [ x['artist'] ]
 
+  return tagwords
+
+# Lots of ugly code to try and be a magical playlist generator
+def magic_build_playlist(tagwords):
+  # For now fake it - just grab 5 hits from the top 100 and another 5 from the ARIA
+  # FIXME randomise the selection
+  q1 = db.query( "select H.* from hits H, charts C, hitsCharts X where C.name like '%ARIA%' and C.cid=X.cid and H.xid=X.xid limit 5")
+  result = []
+  for item in q1:
+    p = dict()
+    p['artist'] = item['artist']
+    p['song'] = item['name']
+    p['itunes'] = item['buy']
+    result += [ p ]
+  # FIXME randomise the selection
+  q1 = db.query( "select H.* from hits H, charts C, hitsCharts X where C.name like '%Top 100%' and C.cid=X.cid and H.xid=X.xid limit 5")
+  for item in q1:
+    p = dict()
+    p['artist'] = item['artist']
+    p['song'] = item['name']
+    p['itunes'] = item['buy']
+    result += [ p ]
+
+  # FIXME randomise the order
+
+  return result
 
 render = web.template.render(os.path.join(render_relpath, 'templates'), cache=False) #WTF doesnt a relative path work?
 
@@ -82,8 +113,12 @@ class controller:
     def GET(self, egg):
         data = web.input()
         if 'demo' in data:
-          return "Generate a playlist based on : " + data['wordlist']
+          # "Generate a playlist based on : " + data['wordlist']
+          tagwords = data['wordlist']
+          songs = magic_build_playlist(tagwords)
+          return render.playlist(egg, songs)   # index.html is the template
 
+        tagwords = magic_tag_cloud()
         return render.index(egg, tagwords)   # index.html is the template
   
 app = web.application(urls, globals())
