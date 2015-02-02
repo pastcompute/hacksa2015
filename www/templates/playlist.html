@@ -92,6 +92,13 @@ CoinWidgetCom.go({
 
   </div>
 
+  <div class="panel panel-warning">
+    <div class="panel panel-primary">
+    <h3>ADVERTISEMENT!</h3>
+    </div>
+  </div>
+
+
   <div class="panel panel-primary">
     <div class="panel-heading">
       $if egg == 'aussie':
@@ -102,14 +109,14 @@ CoinWidgetCom.go({
     <div class="panel-body">
 
       <div class="row" style="background-color: #222222; color: #ffffff;">
-          <table class="table">
+          <table class="table" style="font-size:+1;">
             <thead>
               <tr>
                 <th>Song</th>
                 <th>Artist</th>
-                <th>iTunes</th>
-                <th>Google Play</th>
-                <th>Spotify</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
@@ -117,13 +124,15 @@ CoinWidgetCom.go({
                   <tr><td>$(xx['song'])</td><td>$xx['artist']</td><td><a href="$xx['itunes']">Get me from iTunes</a></td><td>Get me from PlayStore</td><td>Get me from Spotify</td></tr>
             </tbody>
           </table>
+<h4>For a larger playlist, please Sign up For Free With Twitter or Facebook</h4>
       </div>
     </div>
   </div>
 
 <div style="margin:24px;">
-  <input class="btn btn-lg btn-warning" id="submitbutton1" type="submit" name="demo" value="Get this entire Playlist on your iPhone"/>
-  <input class="btn btn-lg btn-warning" id="submitbutton1" type="submit" name="demo" value="Get this entire Playlist on your Android"/>
+  <a href="javascript:alert('Sign up For Free and link your iTunes account!');" class="btn btn-lg btn-warning" id="playlist_iphone" type="submit" name="demo">Get this Playlist on your iPhone</a>
+  <a href="javascript:alert('Sign up For Free and link your Google play account!');" class="btn btn-lg btn-warning" id="playlist_android" type="submit" name="demo">Get this Playlist on your Android</a>
+  <a href="javascript:alert('Sign up For Free and link your Spotify account!');" class="btn btn-lg btn-warning" id="playlist_android" type="submit" name="demo">Sync with Spotify</a>
 </div>
 
 <div style="margin:24px;">
@@ -132,10 +141,11 @@ CoinWidgetCom.go({
 
   &nbsp;&nbsp;&nbsp;&nbsp;
   <a href="?premium-features" class="btn btn-lg btn-danger" id="premium" type="submit" name="demo">Premium Features</a>
+  <a href="?premium-features" class="btn btn-lg btn-danger" id="premium" type="submit" name="demo">Ad Free Experience</a>
 </div>
 
 </div>
-<div style="color: white; font-size: -3; margin:100px;">Phaze Space is a Fourtex Labs production. Produced by <a href="https://twitter.com/pastcompute">@pastcompute</a>, zaxxattak, <a href="https://twitter.com/Anup_Raghavan">AnupR</a> &amp; DNS</div>
+<div style="color: white; font-size: -3; margin:100px;">Phaze Space is a Fourtex Labs production. Produced by <a href="https://twitter.com/pastcompute">@pastcompute</a>, Zaxattak, <a href="https://twitter.com/Anup_Raghavan">AnupR</a> &amp; DNS</div>
 </div>
 
 </div>
