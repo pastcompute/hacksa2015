@@ -73,7 +73,7 @@ def magic_build_playlist(tagwords):
   q1 = db.query( "select H.* from hits H, charts C, hitsCharts X where C.name like '%ARIA%' and C.cid=X.cid and H.xid=X.xid")
   q2 = db.query( "select H.* from hits H, charts C, hitsCharts X where C.name like '%Top 100%' and C.cid=X.cid and H.xid=X.xid")
   list1 = random.sample(range(x1), min(x1,5))
-  list2 = random.sample(range(x2), min(x1,5))
+  list2 = random.sample(range(x2), min(x2,5))
 
   # I'm pretty sure this can be done better or more Pythonic but its late and this works
   songs = []
