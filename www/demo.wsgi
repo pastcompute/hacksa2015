@@ -44,16 +44,17 @@ def magic_tag_cloud():
   qwords = db.select('genre')
   tagwords = [ ]
   for x in qwords:
-    tagwords += [ x['name'] ]
+    tagwords += [ x['name'].replace(" ",'') ]
   if len(tagwords) < 1:
     tagwords = [ 'rock', 'pop', 'dance' ]
 
   # TODO: Mash with other tables to build up much larger tag cloud
   # e.g. if a hit is in the top three of any chart then add its artist
 
-  q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 3 and hits.xid = hitsCharts.xid")
+  q2 = db.query( "select distinct hits.xid, hits.name, hits.artist  from hitsCharts left join hits where position <= 2 and hits.xid = hitsCharts.xid")
   for x in q2:
-    tagwords += [ x['artist'] ]
+    artist = x['artist']
+    tagwords += [ artist.replace(" ",'') ]
 
   return tagwords
 
