@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sqlite3
 import musicbrainzngs
 import json
@@ -11,7 +12,7 @@ musicbrainzngs.set_useragent("phaze.space hacksa2015 prototype", "0.1")
 conn = sqlite3.connect('charts2.db')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS musicbrainz_recording (id integer primary key autoincrement,song_id integer, musicbrainz_recording text)')
-c.execute('create table if not exists bpm (song_id integer, bpm float);')
+c.execute('create table if not exists stats(song_id integer, bpm float,key text,scale text);')
 conn.commit()
 
 
@@ -23,26 +24,32 @@ for row in rows:
    artist=row[2]
    mq = '"%s" AND artist:"%s"' % (name, artist)
    print 'searching musicbrainz for ' + repr(artist)+ ' - ' + repr(name)
-   result = musicbrainzngs.search_recordings(query=mq, limit=5)
-   mbtrackid = None
-  
+   result = musicbrainzngs.search_recordings(query=mq, limit=10)
+   first_mbtrackid = None
+   
    for y in result['recording-list']:
-      mbtrackid = y['id']   # <-- matches search results from https://musicbrainz.org/search?query=%22Are+You+Gonna+Go+My+Way%22+AND+artist%3A%22Lenny+Kravitz%22+AND+country%3AAU&type=recording&limit=25&method=advanced
-      
-      rel = y['release-list'][0]['id']
-      rec = musicbrainzngs.get_recording_by_id(id=mbtrackid, includes=["tags"])
-      url ='http://acousticbrainz.org/'+mbtrackid+'/low-level'
-      print 'fetching from url: ' +url
-      jsonurl = urllib.urlopen(url)
-      if jsonurl.getcode() == 200:
-         rawJson = json.loads(jsonurl.read())
-         data= rawJson[u'lowlevel']
-         rhythm=rawJson[u'rhythm']
-         beats=rhythm[u'bpm']
-         print 'BPM: ' +repr(beats)
-         c.execute('insert into musicbrainz_recording (song_id,musicbrainz_recording) values (?,?)',(song_id,mbtrackid))
-         c.execute('insert into bpm (song_id,bpm) values (?,?)',(song_id,beats))
-         conn.commit()
-         
-         break;
-         
+      if result['recording-count'] > 0:
+         mbtrackid = y['id']   # <-- matches search results from https://musicbrainz.org/search?query=%22Are+You+Gonna+Go+My+Way%22+AND+artist%3A%22Lenny+Kravitz%22+AND+country%3AAU&type=recording&limit=25&method=advanced
+         if first_mbtrackid is None:
+            first_mbtrackid=mbtrackid
+         rec = musicbrainzngs.get_recording_by_id(id=mbtrackid, includes=["tags"])
+         url ='http://acousticbrainz.org/'+mbtrackid+'/low-level'
+         print 'fetching from url: ' +url
+         jsonurl = urllib.urlopen(url)
+         if jsonurl.getcode() == 200:
+            print '- has an acoustid entry'
+            rawJson = json.loads(jsonurl.read())
+            data= rawJson[u'lowlevel']
+            rhythm=rawJson[u'rhythm']
+            beats=rhythm[u'bpm']
+            tonal=rawJson[u'tonal']
+            key=tonal[u'chords_key']
+            scale=tonal[u'chords_scale']
+            print 'BPM: ' +repr(beats)
+            c.execute('insert into stats(song_id,bpm,key,scale) values (?,?,?,?)',(song_id,beats,key,scale))
+            conn.commit()
+            break;
+   if first_mbtrackid is not None:
+      print ' saving mbid '
+      c.execute('insert into musicbrainz_recording (song_id,musicbrainz_recording) values (?,?)',(song_id,mbtrackid))
+      conn.commit()
