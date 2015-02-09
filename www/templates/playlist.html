@@ -115,7 +115,7 @@ CoinWidgetCom.go({
               <tr>
                 <th>Song</th>
                 <th>Artist</th>
-                <th>&nbsp;</th>
+                <th>BPM</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
@@ -123,7 +123,9 @@ CoinWidgetCom.go({
             </thead>
             <tbody>
               $for xx in songs:
-                  <tr><td>$(xx['song'])</td><td>$xx['artist']</td><td><a href="$xx['itunes']">Get me from iTunes</a></td><td>Get me from PlayStore</td><td>Get me from Spotify</td><td>icon for V or ARIA chart link</td></tr>
+                  <tr><td>$(xx['song'])</td><td>$xx['artist']</td>
+                  <td>$(xx['bpm'])</td>
+                  <td><a href="$xx['itunes']">Get me from iTunes</a></td><td>Get me from PlayStore</td><td>Get me from Spotify</td><td>icon for V or ARIA chart link</td></tr>
             </tbody>
           </table>
 <h4>For a larger playlist, or to create multiple playlists, please Sign up For Free With Twitter or Facebook</h4>

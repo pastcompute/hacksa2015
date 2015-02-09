@@ -31,7 +31,7 @@ chartName=rawChart['Name']
 # chartID is null so ignored
 
 #print 'Date: '+repr(chartDate)+' Descrtiption: '+repr(chartDescription )+ ' name: '+repr( chartName)+ ' url: '+url
-c.execute('insert into charts (date,description,name,url,fetch) values(?,?,?,?,date(\'now\'))',(chartDate,chartDescription,chartName,url))
+c.execute('insert into chart (date,description,name,url,fetch) values(?,?,?,?,date(\'now\'))',(chartDate,chartDescription,chartName,url))
 chartID=c.lastrowid
 conn.commit()
 
@@ -40,12 +40,9 @@ for x in rawChart['Tracks']:
   buy = x[u'Buy']
   name = x[u'Name']
   tid = x[u'id']
-  position = x[u'Position']
+  if u'Position' in x : position = x[u'Position']
  # print 'Artist: '+artist + ' Buy: '+repr(buy)+' name: '+ name+ ' id: ' +repr(tid) + ' position: ' +position
   
   c.execute('insert or ignore into track (track_id,artist,name, buy) values (?,?,?,?)',(tid, artist,name,buy))
   
-  c.execute('insert into chart_pos (chart_id,track_id, position) values (?,?,?)', (chartID,tid,position))
-  conn.commit()
 
-c.close()

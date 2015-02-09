@@ -86,6 +86,7 @@ def magic_build_playlist(tagwords):
     p['artist'] = item['artist']
     p['song'] = item['name']
     p['itunes'] = item['buy']
+    p['bpm'] = random.randrange(100)+100
     songs += [ p ]
   # Randomise the selection : just query the lot then pick out N random positions for now
   i=0
@@ -96,6 +97,7 @@ def magic_build_playlist(tagwords):
     p['artist'] = item['artist']
     p['song'] = item['name']
     p['itunes'] = item['buy']
+    p['bpm'] = random.randrange(100)+100
     songs += [ p ]
   # Randomise the combined list and select 5 of them
   list3 = random.sample(range(len(songs)), min(len(songs),5))
