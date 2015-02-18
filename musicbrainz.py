@@ -13,7 +13,7 @@ conn = sqlite3.connect('charts2.db')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS musicbrainz_recording (id integer primary key autoincrement,song_id integer, musicbrainz_recording text)')
 c.execute('create table if not exists musicbrainz_failure (song_id integer, last_try timestamp)')
-c.execute('create table if not exists aci(song_id integer, bpm float,key text,scale text);')
+c.execute('create table if not exists acoustic(song_id integer, bpm float,key text,danceable text, danceableConf float,gender text,genderConf float,electronic text,electronicConf float);')
 conn.commit()
 
 
@@ -47,8 +47,24 @@ for row in rows:
             tonal=rawJson[u'tonal']
             key=tonal[u'chords_key']
             scale=tonal[u'chords_scale']
-            print 'BPM: ' +repr(beats)
-            c.execute('insert into stats(song_id,bpm,key,scale) values (?,?,?,?)',(song_id,beats,key,scale))
+            highUrl='http://acousticbrainz.org/'+mbtrackid+'/high-level'
+            jsonurl2= urllib.urlopen(highUrl)
+            rawJson2=json.loads(jsonurl2.read())
+            data2=rawJson2[u'highlevel']
+            tmp=data2[u'danceability']
+            danceable=tmp[u'value']
+            danceConfidence=tmp[u'probability']
+            tmp=data2[u'gender']
+            gender=tmp[u'value']
+            genderConf=tmp[u'probability']
+            tmp=data2[u'genre_dortmund']
+            dortmund=tmp[u'value']
+            dortmundConf=tmp[u'probability']
+            tmp=data2[u'genre_electronic']
+            electronic=tmp[u'value']
+            electronicConf=tmp[u'probability']
+            
+            c.execute('insert into acoustic(song_id,bpm,key,danceable,danceableConf,gender,genderConf,electronic,electronicConf) values (?,?,?,?,?,?,?,?,?)',(song_id,beats,key+' '+scale,danceable,danceConfidence,gender,genderConf,electronic,electronicConf))
             conn.commit()
             break;
    if first_mbtrackid is not None:
