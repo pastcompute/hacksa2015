@@ -12,12 +12,14 @@ musicbrainzngs.set_useragent("phaze.space hacksa2015 prototype", "0.1")
 conn = sqlite3.connect('charts2.db')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS musicbrainz_recording (id integer primary key autoincrement,song_id integer, musicbrainz_recording text)')
-c.execute('create table if not exists stats(song_id integer, bpm float,key text,scale text);')
+c.execute('create table if not exists musicbrainz_failure (song_id integer, last_try timestamp)')
+c.execute('create table if not exists acoustic(song_id integer, bpm float,key text,danceable text, danceableConf float,gender text,genderConf float,electronic text,electronicConf float);')
 conn.commit()
 
 
-c.execute('select id,name, artist from song where id not in (select song_id from musicbrainz_recording)')
+c.execute('select id,name, artist from song where id not in (select song_id from musicbrainz_recording) and id not in (select song_id from musicbrainz_failure where last_try > strftime(\'%s\',\'now\',\'-7 days\') group by song_id having count(song_id) < 5)')
 rows=c.fetchall()
+
 for row in rows:
    song_id=row[0]
    name=row[1]
@@ -26,9 +28,9 @@ for row in rows:
    print 'searching musicbrainz for ' + repr(artist)+ ' - ' + repr(name)
    result = musicbrainzngs.search_recordings(query=mq, limit=10)
    first_mbtrackid = None
-   
    for y in result['recording-list']:
-      if result['recording-count'] > 0:
+      #if (result['recording-count']result['recording-count'] > 0:
+      if 'id' in y:
          mbtrackid = y['id']   # <-- matches search results from https://musicbrainz.org/search?query=%22Are+You+Gonna+Go+My+Way%22+AND+artist%3A%22Lenny+Kravitz%22+AND+country%3AAU&type=recording&limit=25&method=advanced
          if first_mbtrackid is None:
             first_mbtrackid=mbtrackid
@@ -45,11 +47,32 @@ for row in rows:
             tonal=rawJson[u'tonal']
             key=tonal[u'chords_key']
             scale=tonal[u'chords_scale']
-            print 'BPM: ' +repr(beats)
-            c.execute('insert into stats(song_id,bpm,key,scale) values (?,?,?,?)',(song_id,beats,key,scale))
+            highUrl='http://acousticbrainz.org/'+mbtrackid+'/high-level'
+            jsonurl2= urllib.urlopen(highUrl)
+            rawJson2=json.loads(jsonurl2.read())
+            data2=rawJson2[u'highlevel']
+            tmp=data2[u'danceability']
+            danceable=tmp[u'value']
+            danceConfidence=tmp[u'probability']
+            tmp=data2[u'gender']
+            gender=tmp[u'value']
+            genderConf=tmp[u'probability']
+            tmp=data2[u'genre_dortmund']
+            dortmund=tmp[u'value']
+            dortmundConf=tmp[u'probability']
+            tmp=data2[u'genre_electronic']
+            electronic=tmp[u'value']
+            electronicConf=tmp[u'probability']
+            
+            c.execute('insert into acoustic(song_id,bpm,key,danceable,danceableConf,gender,genderConf,electronic,electronicConf) values (?,?,?,?,?,?,?,?,?)',(song_id,beats,key+' '+scale,danceable,danceConfidence,gender,genderConf,electronic,electronicConf))
             conn.commit()
             break;
    if first_mbtrackid is not None:
       print ' saving mbid '
       c.execute('insert into musicbrainz_recording (song_id,musicbrainz_recording) values (?,?)',(song_id,mbtrackid))
       conn.commit()
+   else:
+      print ' song not found in musicbrainz ' 
+      c.execute('insert into musicbrainz_failure (song_id,last_try) values (?,strftime(\'%s\',\'now\'))',(song_id,))
+      conn.commit()
+
